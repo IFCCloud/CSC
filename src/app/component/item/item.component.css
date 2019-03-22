@@ -1,0 +1,39 @@
+.mat-expansion-panel-header {
+    background-color: #494E5E !important;
+}
+
+.mat-expansion-panel-header-title {
+    color : white !important;
+}
+
+.mat-form-field {
+    padding-right : 10px;
+}
+
+.item-container {
+    justify-content: space-between;
+    align-items: center;
+}
+.test {
+    border-radius: 0!important;
+    padding: 1px 2px;
+    border: 1px solid #ccc;
+}
+.delete {
+  color : #c7c2cf;
+}
+
+.fullWidth {
+  width:100% !important;
+}
+.uom_action_tile {
+  width: 3% !important;
+}
+.uom_barcode_tile {
+  left : 65% !important;
+  width: 35% !important;
+}
+.uom_dim_tile {
+  left : 3% !important;
+  width: 60% !important;
+}

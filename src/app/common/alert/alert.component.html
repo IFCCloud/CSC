@@ -1,0 +1,14 @@
+<!--<ngb-alert *ngIf="this.msgService.message != null" [type]="this.msgService.type" (close)="this.msgService.clear()">
+    {{ this.msgService.message }}</ngb-alert> -->
+
+
+    <div *ngIf="this.msgService.messages.length">
+        <div *ngFor='let message of this.msgService.messages'  class="{{ this.msgService.class }}" >            
+            <button type="button" class="close" aria-label="Close" (click)="this.msgService.clear()" mat-button  mat-icon-button matSuffix mat-icon-button aria-label="Clear">
+                <mat-icon matListIcon>close</mat-icon>
+            </button>
+            <span>{{ message }}</span>
+        </div>
+    </div>
+    
+    

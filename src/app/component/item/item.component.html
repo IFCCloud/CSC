@@ -1,0 +1,179 @@
+<div>
+  <form [formGroup]="itemForm" fxLayout="column">
+  <!--<mat-accordion class="item-container">-->
+    <mat-expansion-panel [expanded]="itemPanelState" hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Item Info</mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <mat-form-field>
+          <mat-select placeholder="Company" formControlName="company">
+            <mat-option *ngFor="let comp of companies" [value]="comp.code">{{ comp.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <br />
+        <mat-form-field fxFlex>
+          <input matInput type="text" placeholder="Item" formControlName="itemNo" >
+          <button mat-button *ngIf="itemForm.controls.itemNo.value"
+            matSuffix mat-icon-button aria-label="Search" (click)="getItem()">
+            <mat-icon matListIcon>search</mat-icon>
+          </button>
+          <button mat-button  mat-icon-button *ngIf="itemForm.controls.itemNo.value" matSuffix mat-icon-button aria-label="Clear" (click)="itemForm.controls.itemNo.setValue('')">
+              <mat-icon matListIcon>close</mat-icon>
+          </button>
+        </mat-form-field>
+        <mat-form-field style="width:450px;" fxFlex  >
+          <input matInput type="text" placeholder="Description" formControlName="itemDesc" >
+          <button mat-button *ngIf="itemForm.controls.itemDesc.value" matSuffix mat-icon-button aria-label="Clear" (click)="itemForm.controls.itemDesc.setValue('')">
+            <mat-icon matListIcon>close</mat-icon>
+          </button>
+      </mat-form-field>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel class="uom_expansion_panel" [expanded]="uomPanelState"  hideToggle>
+        <mat-expansion-panel-header>
+          <mat-panel-title>Unit of Measures</mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-action-row>
+          <button  mat-stroked-button color="primary" (click)="addItemUOM()">
+              <mat-icon>add</mat-icon><span>Add UOM</span>
+          </button>
+        </mat-action-row>
+
+        <div formArrayName="itemUOMs" class="uom_panel">
+          <div *ngFor="let itemUOMGrp of itemForm.get('itemUOMs').controls; let i = index" [formGroupName]="i">
+            <div *ngIf="i > 0"> <br/><hr class="uom_hr"><br/></div>
+
+            <mat-grid-list  [cols]="breakpoint" rowHeight="350px" (window:resize)="onResize($event)">
+              <mat-grid-tile [class.fullWidth]="breakpoint == 1" class="uom_action_tile">
+                <button mat-button *ngIf="i > 0" matSuffix mat-icon-button aria-label="Clear" (click)="deleteItemUOM(i)">
+                    <mat-icon class="delete">delete</mat-icon>
+                </button>
+            </mat-grid-tile>
+              <mat-grid-tile [class.fullWidth]="breakpoint == 1" class="uom_dim_tile">
+                <div class="input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
+                  <mat-form-field fxFlex>
+                    <mat-select placeholder="Item UOM" formControlName="UOM">
+                      <mat-option *ngFor="let u of itemUOM" [value]="u.code">{{ u.desc }}</mat-option>
+                    </mat-select>
+                    <button mat-button *ngIf="itemUOMGrp.controls.UOM.value"
+                      matSuffix mat-icon-button aria-label="Clear" (click)="itemUOMGrp.controls.UOM.setValue('')">
+                      <mat-icon matListIcon>close</mat-icon>
+                    </button>
+                  </mat-form-field>
+                  <mat-form-field fxFlex>
+                    <input matInput type="number" placeholder="Conversion Quantity" formControlName="quantity" >
+                    <button mat-button  mat-icon-button *ngIf="itemUOMGrp.controls.quantity.value"
+                      matSuffix mat-icon-button aria-label="Clear" (click)="itemUOMGrp.controls.quantity.setValue('')">
+                        <mat-icon matListIcon>close</mat-icon>
+                      </button>
+                  </mat-form-field>
+
+                  <br /><br />
+
+                  <mat-form-field fxFlex>
+                    <input matInput type="number" placeholder="Length (Depth)" formControlName="length" >
+                    <button mat-button  mat-icon-button *ngIf="itemUOMGrp.controls.length.value"
+                      matSuffix mat-icon-button aria-label="Clear" (click)="itemUOMGrp.controls.length.setValue('')">
+                        <mat-icon matListIcon>close</mat-icon>
+                      </button>
+                  </mat-form-field>
+                  <mat-form-field fxFlex>
+                    <input matInput type="number" placeholder="Width" formControlName="width" >
+                    <button mat-button  mat-icon-button *ngIf="itemUOMGrp.controls.width.value"
+                      matSuffix mat-icon-button aria-label="Clear" (click)="itemUOMGrp.controls.width.setValue('')">
+                        <mat-icon matListIcon>close</mat-icon>
+                      </button>
+                  </mat-form-field>
+                  <mat-form-field fxFlex>
+                    <input matInput type="number" placeholder="Height" formControlName="height" >
+                    <button mat-button  mat-icon-button *ngIf="itemUOMGrp.controls.height.value"
+                      matSuffix mat-icon-button aria-label="Clear" (click)="itemUOMGrp.controls.height.setValue('')">
+                        <mat-icon matListIcon>close</mat-icon>
+                      </button>
+                  </mat-form-field>
+                  <mat-form-field fxFlex>
+                    <mat-select placeholder="Dimension UOM" formControlName="dimUOM">
+                      <mat-option *ngFor="let uom of dimUOM" [value]="uom.code">{{ uom.desc }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <br/><br/>
+                  <mat-form-field fxFlex>
+                    <input matInput type="number" placeholder="Weight" formControlName="weight" >
+                    <button mat-button  mat-icon-button *ngIf="itemUOMGrp.controls.weight.value"
+                      matSuffix mat-icon-button aria-label="Clear" (click)="itemUOMGrp.controls.weight.setValue('')">
+                        <mat-icon matListIcon>close</mat-icon>
+                      </button>
+                  </mat-form-field>
+                  <mat-form-field fxFlex>
+                    <mat-select placeholder="Weight UOM" formControlName="weightUOM"  >
+                      <mat-option *ngFor="let uom of weightUOM" [value]="uom.code">{{ uom.desc }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </mat-grid-tile>
+
+              <mat-grid-tile [class.fullWidth]="breakpoint == 1" class="uom_barcode_tile" formArrayName="barcodes" >
+                <button  mat-stroked-button color="primary" (click)="addBarcode(i)">
+                    <mat-icon>add</mat-icon><span>Add Barcode</span>
+                </button>
+                <div *ngFor="let bc of itemUOMGrp.get('barcodes').controls let j = index" [formGroupName]="j">
+                  <mat-form-field style="width:250px;">
+                    <input matInput type="text" placeholder="Barcode" formControlName="barcode">
+                  </mat-form-field>
+                  <button mat-button *ngIf="j > 0" matSuffix mat-icon-button aria-label="Clear" (click)="deleteBarcode(i,j)"> <mat-icon matListIcon>close</mat-icon></button>
+                  <br />
+                </div>
+              </mat-grid-tile>
+            </mat-grid-list>
+          </div>
+        </div>
+    </mat-expansion-panel>
+
+    <!-- disable this panel for now
+    <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(2)" hideToggle>
+        <mat-expansion-panel-header>
+          <mat-panel-title>Item Characteristics</mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <mat-form-field fxFlex>
+          <mat-select placeholder="Currency" formControlName="currency">
+            <mat-option *ngFor="let cur of currency" [value]="cur.code">{{ cur.desc }}</mat-option>
+          </mat-select>
+          <button mat-button  mat-icon-button *ngIf="itemForm.controls.currency.value"
+            matSuffix mat-icon-button aria-label="Clear" (click)="itemForm.controls.currency.setValue('')">
+              <mat-icon matListIcon>close</mat-icon>
+            </button>
+        </mat-form-field>
+
+        <mat-form-field fxFlex>
+          <input matInput type="number" placeholder="Unit Price" formControlName="price" >
+          <button mat-button  mat-icon-button *ngIf="itemForm.controls.price.value"
+            matSuffix mat-icon-button aria-label="Clear" (click)="itemForm.controls.price.setValue('')">
+              <mat-icon matListIcon>close</mat-icon>
+            </button>
+        </mat-form-field>
+        <br /><br />
+        <mat-form-field fxFlex>
+          <input matInput type="text" placeholder="Storage Template" formControlName="storage" >
+          <button mat-button *ngIf="itemForm.controls.storage.value"
+            matSuffix mat-icon-button aria-label="Clear" (click)="itemForm.controls.storage.setValue('')">
+            <mat-icon matListIcon>close</mat-icon>
+          </button>
+        </mat-form-field>
+    </mat-expansion-panel>
+    -->
+
+   <!-- </mat-accordion> -->
+    <mat-action-row>
+      <div class="panel_action">
+        <button  mat-stroked-button color="primary" (click)="addNew()">
+            <mat-icon>clear</mat-icon><span>Clear</span>
+        </button>
+        <button  mat-stroked-button color="primary" (click)="save()">
+            <mat-icon>save_alt</mat-icon><span>Save</span>
+        </button>
+      </div>
+    </mat-action-row>
+  </form>
+</div>
